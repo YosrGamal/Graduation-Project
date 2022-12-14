@@ -43,3 +43,8 @@ for category in categories:
 pick_in = open('feature_extraction.pickle','wb')
 pickle.dump(data,pick_in)
 pick_in.close()
+
+
+pick_in = open('feature_extraction.pickle','rb')
+data = pickle.load(pick_in)
+pick_in.close()
