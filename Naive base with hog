@@ -26,3 +26,20 @@ dir = '/content/drive/Shareddrives/Graduation Project/Dataset/Teeth images'
 categories = ['Afradapis', 'Elephants', 'Hyrax' , 'Masrasector' , 'Sharks']
 images = []
 data = []
+
+for category in categories:
+    path = os.path.join(dir,category)
+    label = categories.index(category)
+    
+    for img in os.listdir(path):
+        imgpath = os.path.join(path,img)
+        datimage = cv2.imread(imgpath,0)
+        datimage = cv2.resize(datimage,(128, 256))
+        image = np.array(datimage).flatten()
+        hog_desc = feature.hog(datimage, orientations=9, pixels_per_cell=(8, 8),cells_per_block=(2, 2), transform_sqrt=True, block_norm='L2-Hys')
+        
+        data.append([hog_desc,label])
+        
+pick_in = open('feature_extraction.pickle','wb')
+pickle.dump(data,pick_in)
+pick_in.close()
