@@ -20,3 +20,9 @@ from skimage import feature
 
 from google.colab import drive
 drive.mount('/content/drive')
+
+
+dir = '/content/drive/Shareddrives/Graduation Project/Dataset/Teeth images'
+categories = ['Afradapis', 'Elephants', 'Hyrax' , 'Masrasector' , 'Sharks']
+images = []
+data = []
