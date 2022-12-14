@@ -68,3 +68,8 @@ GNBclf = GaussianNB()
 model = GNBclf.fit(xtrain, ytrain)
 preds = GNBclf.predict(xtest)
 
+
+prediction = model.predict(xtest)
+accuracy = model.score(xtest, ytest)
+
+print('Accuracy: ',accuracy)
