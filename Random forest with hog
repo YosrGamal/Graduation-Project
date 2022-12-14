@@ -17,3 +17,6 @@ from argparse import ArgumentParser
 import argparse
 from sklearn.svm import LinearSVC
 from skimage import feature
+
+from google.colab import drive
+drive.mount('/content/drive')
