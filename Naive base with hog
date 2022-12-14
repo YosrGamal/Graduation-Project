@@ -73,3 +73,7 @@ prediction = model.predict(xtest)
 accuracy = model.score(xtest, ytest)
 
 print('Accuracy: ',accuracy)
+
+# print("Confusion matrix:",)
+print("Precision:",metrics.precision_score(ytest, prediction, pos_label='positive',average= 'weighted'))
+print("Recall:",metrics.recall_score(ytest, prediction,pos_label='positive',average= 'weighted'))
