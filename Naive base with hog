@@ -1,0 +1,79 @@
+import os
+import numpy as np
+import cv2
+import pickle
+import random
+from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from sklearn import metrics
+from skimage.io import imread
+from skimage.transform import resize
+from skimage.feature import hog
+from skimage import exposure
+import matplotlib.pyplot as plt
+from argparse import ArgumentParser
+import argparse
+from sklearn.svm import LinearSVC
+from skimage import feature
+
+
+from google.colab import drive
+drive.mount('/content/drive')
+
+
+dir = '/content/drive/Shareddrives/Graduation Project/Dataset/Teeth images'
+categories = ['Afradapis', 'Elephants', 'Hyrax' , 'Masrasector' , 'Sharks']
+images = []
+data = []
+
+for category in categories:
+    path = os.path.join(dir,category)
+    label = categories.index(category)
+    
+    for img in os.listdir(path):
+        imgpath = os.path.join(path,img)
+        datimage = cv2.imread(imgpath,0)
+        datimage = cv2.resize(datimage,(128, 256))
+        image = np.array(datimage).flatten()
+        hog_desc = feature.hog(datimage, orientations=9, pixels_per_cell=(8, 8),cells_per_block=(2, 2), transform_sqrt=True, block_norm='L2-Hys')
+        
+        data.append([hog_desc,label])
+        
+pick_in = open('feature_extraction.pickle','wb')
+pickle.dump(data,pick_in)
+pick_in.close()
+
+
+pick_in = open('feature_extraction.pickle','rb')
+data = pickle.load(pick_in)
+pick_in.close()
+
+random.shuffle(data)
+features = []
+labels = []
+
+for feature, label in data:
+    features.append(feature)
+    labels.append(label)
+
+
+xtrain, xtest, ytrain, ytest =train_test_split(
+   features,labels,test_size = 0.30, 
+)
+
+
+
+GNBclf = GaussianNB()
+model = GNBclf.fit(xtrain, ytrain)
+preds = GNBclf.predict(xtest)
+
+
+prediction = model.predict(xtest)
+accuracy = model.score(xtest, ytest)
+
+print('Accuracy: ',accuracy)
+
+# print("Confusion matrix:",)
+print("Precision:",metrics.precision_score(ytest, prediction, pos_label='positive',average= 'weighted'))
+print("Recall:",metrics.recall_score(ytest, prediction,pos_label='positive',average= 'weighted'))
